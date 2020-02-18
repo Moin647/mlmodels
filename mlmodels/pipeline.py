@@ -42,7 +42,32 @@ import numpy as np
 from sklearn.decomposition import TruncatedSVD
 
 
+class Pipe:
+    def __init__(self):
+        self.op = None
 
+    def add_operation(self, callback, ):
+        self.op = callback
+
+    def exec_operation(self, **kwargs):
+        try:
+            if self.op: self.op(**kwargs)
+            else: raise Exception("No operation to execute within this pipe")
+        except Exception as e:
+            raise Exception(f"Error {e} during execute pipe")
+
+class Pipeline:
+    def __init__(self):
+        self.pipes = []
+
+    def add_pipe(self, pipe):
+        if not isinstance(pipe, Pipe):
+            raise Exception("Wrong pipe type to add")
+        self.pipes.append(pipe)
+
+    def run(self):
+        for p in self.pipes:
+            p.exec_operation()
 
 ####################################################################################################
 # Helper functions
